@@ -5,7 +5,13 @@ sources:
       database: raw
       schema: jaffle_shop
       tables:
-        - name: customer
+        - name: customers
+          columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+
         - name: orders
           loaded_at_field: _etl_loaded_at
           freshness:
@@ -15,10 +21,25 @@ sources:
             error_after:
               period: hour
               count: 24
-            
-    - name: stripe
-      database: raw
-      schema: stripe
-      tables:
-        - name: payment
+
+models:
+  - name: stg_customer
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+              
+  - name: stg_orders
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: status
+        tests:
+          - accepted_values:
+              values: ['shipped','returned','completed','return_pending','placed']
+                            
+
 
