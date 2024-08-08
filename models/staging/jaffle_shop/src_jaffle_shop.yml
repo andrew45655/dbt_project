@@ -1,0 +1,24 @@
+version: 2
+
+sources:
+    - name: jaffle_shop
+      database: raw
+      schema: jaffle_shop
+      tables:
+        - name: customer
+        - name: orders
+          loaded_at_field: _etl_loaded_at
+          freshness:
+            warn_after:
+              period: minute
+              count: 1
+            error_after:
+              period: hour
+              count: 24
+            
+    - name: stripe
+      database: raw
+      schema: stripe
+      tables:
+        - name: payment
+
